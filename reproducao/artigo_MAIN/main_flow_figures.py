@@ -3,7 +3,7 @@ Style of the original article: viridis maps, micro panels in micro-mesh indices 
 import json, pickle, os, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-C = plt.rcParams["axes.prop_cycle"].by_key()["color"]      # matplotlib default (tab10)
+BLUE, ORANGE, GREEN, RED, GREY = "#1f6fe0", "#e07b1b", "#128a3e", "#c62828", "#8a8a8a"   # palette of the original article figures
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8, "axes.titlesize": 8, "axes.titleweight": "bold",
                      "axes.grid": False, "savefig.dpi": 300, "figure.dpi": 150})
 OUT = os.environ.get("OUT", "figuras/"); os.makedirs(OUT, exist_ok=True)
@@ -47,9 +47,9 @@ for r, p in enumerate(("1.1", "1.3", "1.4")):
 fig.tight_layout(); fig.savefig(OUT+"fig8.png", bbox_inches="tight"); plt.close(fig)
 
 # Figure 9: summary
-V = [("noise_floor", "micro vs micro (500/500)", C[7]), ("UPS", "upscaled, no compression", C[0]), ("DA25", "DA, 25 independent", C[1]),
-     ("DAI", "DA, 1000 independent", C[2]), ("DAC", "DA, 1000 with copula", C[3])]
-plt.rcParams.update({"axes.grid": True, "grid.alpha": 0.3})
+V = [("noise_floor", "micro vs micro (500/500)", GREY), ("UPS", "upscaled, no compression", GREEN), ("DA25", "DA, 25 independent", BLUE),
+     ("DAI", "DA, 1000 independent", ORANGE), ("DAC", "DA, 1000 with copula", RED)]
+plt.rcParams.update({"axes.grid": True, "grid.alpha": 0.35, "patch.force_edgecolor": True, "patch.edgecolor": "black", "patch.linewidth": 0.6})
 fig, ax = plt.subplots(1, 3, figsize=(7.6, 2.6)); x = np.arange(3); w = 0.16
 for k, (key, lab, col) in enumerate(V):
     for j, (q, t) in enumerate((("mean", "(a) Mean pressure, rel. L$^2$ error (%)"), ("sd", "(b) Sd of pressure, rel. L$^2$ error (%)"))):

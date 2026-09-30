@@ -2,8 +2,10 @@ import json, sys, pickle, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#000000", "#7f7f7f"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.3, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
+# palette of the original article figures
+BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f6fe0", "#e07b1b", "#128a3e", "#c62828", "#1b2a4a", "#8a8a8a"
+GREEN, RED = AQUA, YEL
+plt.rcParams.update({"patch.force_edgecolor": True, "patch.edgecolor": "black", "patch.linewidth": 0.6, "font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.35, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
 import os
 OUT = "figuras/"; os.makedirs(OUT + "supp", exist_ok=True)
 PN = {"1.1": "Problem 1", "1.3": "Problem 2", "1.4": "Problem 3"}; PC = {"1.1": BLUE, "1.3": ORANGE, "1.4": AQUA}
@@ -11,24 +13,47 @@ CN = {"xx": "K$_{xx}$", "yy": "K$_{yy}$", "xy": "K$_{xy}$"}
 which = sys.argv[1:] or ["1", "2", "3", "4", "5", "6"]
 
 if "1" in which:
-    fig, ax = plt.subplots(1, 3, figsize=(7.2, 2.6))
-    BC = {"Problem 1": dict(left=1, right=0), "Problem 2": dict(bottom=1, left=0), "Problem 3": dict(left=1, right=0, top=0, bottom=0)}
-    for a, (t, bc) in zip(ax, BC.items()):
-        a.set_xlim(-2.2, 17.2); a.set_ylim(-2.2, 17.2); a.set_aspect("equal"); a.axis("off")
+    # Figure 1: boundary conditions (style of the original article) and one permeability realization per problem
+    from matplotlib.lines import Line2D
+    fig, ax = plt.subplots(2, 3, figsize=(7.4, 5.0))
+    BC = {"1.1": dict(left=1, right=0), "1.3": dict(bottom=1, left=0), "1.4": dict(left=1, right=0, top=0, bottom=0)}
+    ARR = {"1.1": ((2.5, 7.5), (12.5, 7.5)), "1.3": ((11.0, 3.0), (3.0, 11.5)), "1.4": ((2.5, 7.5), (12.5, 7.5))}
+    seg = dict(left=([0, 0], [0, 15]), right=([15, 15], [0, 15]), bottom=([0, 15], [0, 0]), top=([0, 15], [15, 15]))
+    lab = dict(left=(-1.4, 7.5, 90), right=(16.4, 7.5, 90), bottom=(7.5, -1.4, 0), top=(7.5, 16.4, 0))
+    for j, p in enumerate(PN):
+        a = ax[0, j]; bc = BC[p]
+        a.set_xlim(-2.4, 17.4); a.set_ylim(-2.4, 17.4); a.set_aspect("equal"); a.axis("off")
         for i in range(16):
-            a.plot([i, i], [0, 15], color="#d9d8d4", lw=0.5); a.plot([0, 15], [i, i], color="#d9d8d4", lw=0.5)
+            a.plot([i, i], [0, 15], color="#d9d9d9", lw=0.5); a.plot([0, 15], [i, i], color="#d9d9d9", lw=0.5)
         for i in range(0, 16, 3):
-            a.plot([i, i], [0, 15], color="0.35", lw=1.0); a.plot([0, 15], [i, i], color="0.35", lw=1.0)
-        seg = dict(left=([0, 0], [0, 15]), right=([15, 15], [0, 15]), bottom=([0, 15], [0, 0]), top=([0, 15], [15, 15]))
+            a.plot([i, i], [0, 15], color="0.15", lw=1.0); a.plot([0, 15], [i, i], color="0.15", lw=1.0)
         for f, (xs, ys) in seg.items():
-            v = bc.get(f); col = MUTED if v is None else (BLUE if v == 1 else ORANGE)
-            a.plot(xs, ys, color=col, lw=4 if v is not None else 2.5, solid_capstyle="butt")
-        lab = dict(left=(-1.3, 7.5, 90), right=(16.3, 7.5, 90), bottom=(7.5, -1.3, 0), top=(7.5, 16.3, 0))
-        for f, (x, y, r) in lab.items():
-            v = bc.get(f); s = "no flow" if v is None else f"u = {v}"
-            a.text(x, y, s, ha="center", va="center", rotation=r, fontsize=7, color=INK if v is not None else MUTED)
-        a.set_title(t)
-    fig.tight_layout(); fig.savefig(OUT+"fig1.png", bbox_inches="tight"); plt.close(fig)
+            v = bc.get(f)
+            a.plot(xs, ys, color=GREEN if v is None else BLUE, lw=4.5, solid_capstyle="butt")
+            x, y, r = lab[f]
+            a.text(x, y, "∂p/∂n = 0" if v is None else f"p = {v:.1f}", ha="center", va="center", rotation=r, fontsize=7,
+                   color=GREEN if v is None else BLUE, fontweight="bold")
+        (x0, y0), (x1, y1) = ARR[p]
+        a.annotate("", (x1, y1), (x0, y0), arrowprops=dict(arrowstyle="-|>", color=RED, lw=2.2, mutation_scale=14))
+        a.text((x0 + x1) / 2 + 0.6, (y0 + y1) / 2 + 0.9, "q", color=RED, fontsize=10, fontweight="bold")
+        a.set_title(f"({'abc'[j]}) {PN[p]}")
+        r = pickle.load(open(f"_cache_P{p.replace('.', '_')}_NR1000_v14.pkl", "rb"))
+        b = ax[1, j]; lk = np.log(r["K_micro_first_realiz"])
+        im = b.imshow(lk, origin="lower", cmap="viridis", extent=[0, 15, 0, 15], vmin=-2.5, vmax=2.5)
+        for g in range(0, 16, 3):
+            b.axvline(g, color="white", lw=1.0); b.axhline(g, color="white", lw=1.0)
+        b.grid(False); b.set_xticks([0, 5, 10, 15]); b.set_yticks([0, 5, 10, 15]); b.tick_params(labelsize=7)
+        b.set_xlabel("x (m)", fontsize=7.5); b.set_title(f"({'def'[j]}) ln κ, one realization")
+        if j == 0: b.set_ylabel("y (m)", fontsize=7.5)
+    
+    h = [Line2D([], [], color=BLUE, lw=4.5), Line2D([], [], color=GREEN, lw=4.5), Line2D([], [], color="#d9d9d9", lw=1.2),
+         Line2D([], [], color="0.15", lw=1.2), Line2D([], [], color=RED, lw=2.2, marker=">", ms=6)]
+    fig.legend(h, ["Dirichlet: imposed pressure", "Neumann: no flow", "fine grid 15 × 15", "coarse grid 5 × 5 (α = 3)", "Darcy flux q"],
+               loc="lower center", ncol=5, fontsize=6.5, frameon=True, bbox_to_anchor=(0.46, -0.01))
+    fig.subplots_adjust(left=0.06, right=0.9, top=0.96, bottom=0.12, hspace=0.12, wspace=0.18)
+    pos = ax[1, 2].get_position(); cax = fig.add_axes([pos.x1 + 0.012, pos.y0, 0.013, pos.height])
+    cb = fig.colorbar(im, cax=cax); cb.set_label("ln κ", fontsize=7.5); cb.ax.tick_params(labelsize=7)
+    fig.savefig(OUT+"fig1.png", bbox_inches="tight"); plt.close(fig)
 
 if "2" in which:
     d = json.load(open("main_tc_cells.json")); alpha = 0.953
