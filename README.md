@@ -1,5 +1,7 @@
 # upscaling-and-downscaling (`rdupscale`)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23052516.svg)](https://doi.org/10.5281/zenodo.23052516)
+
 Stochastic upscaling of permeability ensembles as rate–distortion coding, solved by
 Deterministic Annealing (DA), and stochastic LML downscaling for single-phase Darcy
 flow in heterogeneous porous media.
@@ -71,7 +73,11 @@ and the downscaled fields.
 
 ## How to cite
 
-See [`CITATION.cff`](CITATION.cff). A Zenodo DOI is assigned to each release.
+Version 0.2.0, which reproduces every number, table and figure of the associated articles, is archived on Zenodo:
+
+> Falcão Costa, I., Guimarães, L. J. do N., Araújo, É. da R. (2026). *upscaling-and-downscaling (rdupscale): rate–distortion stochastic upscaling by Deterministic Annealing and LML downscaling* (v0.2.0). Zenodo. https://doi.org/10.5281/zenodo.23052516
+
+To cite all versions, use the concept DOI https://doi.org/10.5281/zenodo.23052515. Machine-readable metadata are in [`CITATION.cff`](CITATION.cff).
 
 ## License
 

@@ -1,5 +1,7 @@
 # rdupscale
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23052516.svg)](https://doi.org/10.5281/zenodo.23052516)
+
 Upscaling estocástico por taxa–distorção (Recozimento Determinístico) e downscaling
 LML para escoamento monofásico em meios porosos heterogêneos. Pacote Python que
 reorganiza o código da tese (`tese_eliptico.py`) sem alterar a numérica.
@@ -62,3 +64,12 @@ hiperparâmetros e um `reference.npz` extraído dos caches (usados nos testes).
 Todos os resultados publicados são reproduzidos pelos testes de regressão (sementes fixas).
 
 Versão 0.2.0: tolerância de fusão relativa por padrão, execução paralela em processos, referências dos artigos e da tese.
+
+## Como citar
+
+A versão 0.2.0, que reproduz todos os números, tabelas e figuras dos artigos associados, está arquivada no Zenodo:
+
+> Falcão Costa, I., Guimarães, L. J. do N., Araújo, É. da R. (2026). *upscaling-and-downscaling (rdupscale): rate–distortion stochastic upscaling by Deterministic Annealing and LML downscaling* (v0.2.0). Zenodo. https://doi.org/10.5281/zenodo.23052516
+
+Para citar todas as versões, use o DOI conceitual https://doi.org/10.5281/zenodo.23052515. Os metadados estão em [`CITATION.cff`](CITATION.cff).
+
