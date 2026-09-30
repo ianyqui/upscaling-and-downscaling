@@ -40,19 +40,30 @@ def legend_below(fig, handles, labels, ncol):
     fig.legend(handles, labels, loc="lower center", ncol=ncol, fontsize=8.5, frameon=True, bbox_to_anchor=(0.5, -0.02))
 
 
-def save(fig, name):
-    fig.tight_layout(rect=(0, 0.09, 1, 1), w_pad=1.6)
+def save(fig, name, bottom=0.09):
+    fig.tight_layout(rect=(0, bottom, 1, 1), w_pad=1.6)
     fig.savefig(os.path.join(OUT, name), bbox_inches="tight"); plt.close(fig)
 
 
 # ---------------- Figure 1: the scalar source and its compression ----------------
-fig, ax = plt.subplots(1, 3, figsize=(15, 4.4), gridspec_kw=dict(width_ratios=[1, 1.45, 1.45]))
+fig, ax0 = plt.subplots(2, 2, figsize=(12.5, 9.4)); ax0 = ax0.ravel()
+lk = np.log(res["K_micro_first_realiz"])
+im = ax0[0].imshow(lk, origin="lower", cmap="cividis", extent=[0, 15, 0, 15])
+for g in np.arange(0, 16):
+    ax0[0].axvline(g, color="white", lw=0.3, alpha=0.6); ax0[0].axhline(g, color="white", lw=0.3, alpha=0.6)
+for g in np.arange(0, 16, 3):
+    ax0[0].axvline(g, color="white", lw=1.6); ax0[0].axhline(g, color="white", lw=1.6)
+ax0[0].set_xlabel("x (m)"); ax0[0].set_ylabel("y (m)"); ax0[0].grid(False)
+ax0[0].set_xticks([0, 5, 10, 15]); ax0[0].set_yticks([0, 5, 10, 15])
+ax0[0].set_title("(a) One realization on both meshes")
+fig.colorbar(im, ax=ax0[0], fraction=0.046, pad=0.03, label="ln κ")
+ax = ax0[1:]
 var = res["Kxx_all"].var(axis=0)
 im = ax[0].imshow(var, origin="lower", cmap="viridis", extent=[0, 15, 0, 15])
 ax[0].add_patch(plt.Rectangle((J * 3, I * 3), 3, 3, fill=False, ec=RED, lw=2.2))
-ax[0].set_xlabel("x (m)"); ax[0].set_ylabel("y (m)"); ax[0].grid(False)
+ax[0].set_xlabel("x (m)"); ax[0].grid(False)
 ax[0].set_xticks([0, 5, 10, 15]); ax[0].set_yticks([0, 5, 10, 15])
-ax[0].set_title("(a) One scalar source per macro-cell")
+ax[0].set_title("(b) One scalar source per macro-cell")
 fig.colorbar(im, ax=ax[0], fraction=0.046, pad=0.03, label="Var($K_{xx}$)")
 e = next(d for d in res["da_all_xx"] if tuple(d["IJ"]) == (I, J))
 s, yk, qk = e["samples"], e["yk"], e["qk"] / e["qk"].sum()
@@ -65,17 +76,17 @@ ax[1].vlines(ys, 0, dens, color=ORANGE, lw=1.4)
 ax[1].plot(ys, dens, "o", color=ORANGE, mec="k", mew=0.5, ms=4.5)
 ax[1].set_xlim(0, bins[-1]); ax[1].set_ylim(0, None)
 ax[1].set_xlabel("$K_{xx}$  in the highlighted cell"); ax[1].set_ylabel("probability density")
-ax[1].set_title("(b) The source and its compression")
+ax[1].set_title("(c) The source and its compression")
 h = e["h"]
 ax[2].plot(h[:, 1], h[:, 2], color=GREY, lw=0.8, zorder=1)
 sc = ax[2].scatter(h[:, 1], h[:, 2], c=h[:, 3], cmap="viridis", s=14, zorder=2)
 ax[2].set_xscale("log"); ax[2].set_xlabel("distortion  $D$"); ax[2].set_ylabel("rate  $I(X;Q)$  [nats]")
-ax[2].set_title("(c) The rate-distortion curve")
+ax[2].set_title("(d) The rate-distortion curve")
 fig.colorbar(sc, ax=ax[2], fraction=0.046, pad=0.03, label="$K$ in use")
 legend_below(fig, [Patch(color=BLUE, alpha=0.45), Line2D([], [], color=ORANGE, marker="o", mec="k", mew=0.5, lw=1.4),
                    Line2D([], [], color=RED, lw=2)],
              [f"micromesh samples  ($N_R$ = {N})", f"representative realizations  ($K$ = {len(yk)})", "highlighted macro-cell"], 3)
-save(fig, "fig1.png")
+save(fig, "fig1.png", bottom=0.045)
 
 # ---------------- Figure 2: two criteria that disagree ----------------
 mis, mis_s = m("misfit"); pen, _ = m("penalty"); mdl, mdl_s = m("MDL"); ks, ks_s = m("KS"); kst, kst_s = m("KS_test")
