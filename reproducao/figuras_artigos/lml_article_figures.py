@@ -8,8 +8,10 @@ import os, sys
 import json, pickle, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#000000", "#7f7f7f"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.3, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
+# palette of the original article figures
+BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f6fe0", "#e07b1b", "#128a3e", "#c62828", "#1b2a4a", "#8a8a8a"
+GREEN, RED, NAVY, GREY = AQUA, YEL, INK, MUTED
+plt.rcParams.update({"patch.force_edgecolor": True, "patch.edgecolor": "black", "patch.linewidth": 0.6, "font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.35, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
 OUT = (sys.argv[1] if len(sys.argv) > 1 else "figs_lml") + "/"
 os.makedirs(OUT, exist_ok=True)
 from matplotlib.ticker import FuncFormatter
@@ -49,8 +51,8 @@ fig.savefig(OUT+"fig2.png", bbox_inches="tight"); plt.close(fig)
 # Figure 3: the tautology
 fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.6))
 x = np.arange(3); w = 0.2
-for k, (key, lab, col) in enumerate([("coarse_only", "coarse only (no fine statistics)", MUTED), ("raw_no_rescaling", "raw operator", BLUE),
-                                      ("holdout", "calibrated operator, hold-out", ORANGE), ("split_gap", "reference split gap", AQUA)]):
+for k, (key, lab, col) in enumerate([("coarse_only", "coarse only (no fine statistics)", GREY), ("raw_no_rescaling", "raw operator", RED),
+                                      ("holdout", "calibrated operator, hold-out", GREEN), ("split_gap", "reference split gap", BLUE)]):
     for m, a_ in zip(("mean", "sd"), ax):
         vals = [100*J[p][key][m] for p in PROB]
         a_.bar(x+(k-1.5)*w, vals, w*0.92, color=col, label=lab)
@@ -62,7 +64,7 @@ fig.tight_layout(rect=[0, 0.07, 1, 1]); fig.savefig(OUT+"fig3.png", bbox_inches=
 
 # Figure 4: calibration-size experiment
 fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.6))
-for p, col, mk in zip(PROB, (BLUE, ORANGE, AQUA), ("o", "s", "^")):
+for p, col, mk in zip(PROB, (BLUE, ORANGE, GREEN), ("o", "s", "^")):
     cs = J[p]["calibration_size"]; n = np.array(sorted(int(k) for k in cs))
     op = np.array([cs[str(k)]["op_sd"] for k in n]); nu = np.array([cs[str(k)]["null_sd"] for k in n])
     ax[0].plot(n, 100*op, color=col, marker=mk, ms=4, lw=1.3, label=f"{PROB[p]}: operator")

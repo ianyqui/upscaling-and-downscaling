@@ -48,7 +48,7 @@ def save(fig, name, bottom=0.09):
 # ---------------- Figure 1: the scalar source and its compression ----------------
 fig, ax0 = plt.subplots(2, 2, figsize=(12.5, 9.4)); ax0 = ax0.ravel()
 lk = np.log(res["K_micro_first_realiz"])
-im = ax0[0].imshow(lk, origin="lower", cmap="cividis", extent=[0, 15, 0, 15])
+im = ax0[0].imshow(lk, origin="lower", cmap="viridis", extent=[0, 15, 0, 15])
 for g in np.arange(0, 16):
     ax0[0].axvline(g, color="white", lw=0.3, alpha=0.6); ax0[0].axhline(g, color="white", lw=0.3, alpha=0.6)
 for g in np.arange(0, 16, 3):

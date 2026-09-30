@@ -7,8 +7,10 @@ import os, sys
 import json, numpy as np, matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#000000", "#7f7f7f"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.3, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
+# palette of the original article figures
+BLUE, ORANGE, AQUA, YEL, INK, MUTED = "#1f6fe0", "#e07b1b", "#128a3e", "#c62828", "#1b2a4a", "#8a8a8a"
+GREEN, RED, NAVY, GREY = AQUA, YEL, INK, MUTED
+plt.rcParams.update({"patch.force_edgecolor": True, "patch.edgecolor": "black", "patch.linewidth": 0.6, "font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold", "axes.grid": True, "grid.alpha": 0.35, "legend.frameon": True, "legend.framealpha": 0.9, "legend.edgecolor": "0.8", "savefig.dpi": 300, "figure.dpi": 150})
 OUT = (sys.argv[1] if len(sys.argv) > 1 else "figs_cost") + "/"
 os.makedirs(OUT, exist_ok=True)
 from matplotlib.ticker import FuncFormatter
@@ -16,17 +18,17 @@ PLAIN = FuncFormatter(lambda v, _: f"{v:g}")
 MINOR = FuncFormatter(lambda v, _: f"{v:g}" if str(round(v, 6)).lstrip("0.")[:1] in "235" else "")
 sc = json.load(open("master_cost_scaling.json")); r = json.load(open("master_cost.json")); an = json.load(open("master_cost_analysis.json"))
 NAMES = {"1.1": "S1", "1.3": "S2", "1.4": "S3", "1.2": "S4"}
-VAR = [("upscaled_no_compression", "upscaled tensors, no compression", MUTED, "o"), ("DA_independent", "DA, independent cells", BLUE, "s"), ("DA_copula", "DA, Gaussian copula", ORANGE, "^")]
+VAR = [("upscaled_no_compression", "upscaled tensors, no compression", GREEN, "o"), ("DA_independent", "DA, independent cells", ORANGE, "s"), ("DA_copula", "DA, Gaussian copula", RED, "^")]
 
 # Fig 1 solver scaling
 fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.6))
 c = np.array([s["cells"] for s in sc["scaling"]]); tf = np.array([s["t_fine"] for s in sc["scaling"]]); tc = np.array([s["t_coarse_a3"] for s in sc["scaling"]])
 ax[0].loglog(c, 1000*tf, "o-", color=BLUE, ms=4, lw=1.3, label="fine solve")
-ax[0].loglog(c, 1000*tc, "s-", color=MUTED, ms=4, lw=1.3, label="coarse solve, α = 3")
-p = sc["scaling_exponent_last3"]; xx = np.array([c[-3], c[-1]]); ax[0].loglog(xx, 1000*tf[-1]*(xx/c[-1])**p, "--", color=INK, lw=0.8, label=f"∝ n$^{{{p:.2f}}}$")
+ax[0].loglog(c, 1000*tc, "s-", color=ORANGE, ms=4, lw=1.3, label="coarse solve, α = 3")
+p = sc["scaling_exponent_last3"]; xx = np.array([c[-3], c[-1]]); ax[0].loglog(xx, 1000*tf[-1]*(xx/c[-1])**p, "--", color=RED, lw=1.2, label=f"∝ n$^{{{p:.2f}}}$")
 ax[0].set_xlabel("fine-mesh cells n"); ax[0].set_ylabel("time per solve (ms)"); ax[0].set_title("(a) Solver scaling"); ax[0].legend(fontsize=7)
 ra = sc["ratio_vs_alpha_NF480"]; a = [x["alpha"] for x in ra]; rr = [x["ratio"] for x in ra]
-ax[1].loglog(a, rr, "o-", color=ORANGE, ms=4, lw=1.3); ax[1].axvline(12, color=MUTED, ls=":", lw=1)
+ax[1].loglog(a, rr, "o-", color=BLUE, ms=4, lw=1.3); ax[1].axvline(12, color=RED, ls="--", lw=1.4)
 ax[1].set_xlabel("coarsening factor α"); ax[1].set_ylabel("fine / coarse solve time"); ax[1].set_title("(b) Ratio at 480 × 480 cells")
 fig.tight_layout(); fig.savefig(OUT+"fig1.png"); plt.close(fig)
 
@@ -34,12 +36,12 @@ fig.tight_layout(); fig.savefig(OUT+"fig1.png"); plt.close(fig)
 To = r["T_offline"]; S = r["scenarios"]
 fig, ax = plt.subplots(1, 2, figsize=(7.2, 2.6), gridspec_kw=dict(width_ratios=[1, 1.4]))
 lab = ["upscaling\n(500 fine solves)", "DA compression\n(200 anneals)"]; val = [To["upscaling"], To["DA_compression"]]
-b = ax[0].bar(lab, val, color=[BLUE, ORANGE], width=0.6)
+b = ax[0].bar(lab, val, color=[BLUE, RED], width=0.6)
 for x, v in zip(b, val): ax[0].text(x.get_x()+x.get_width()/2, v*1.02, f"{v:.0f} s", ha="center", va="bottom", fontsize=7.5)
 ax[0].set_ylabel("offline wall-clock (s)"); ax[0].set_title("(a) Offline, paid once"); ax[0].set_ylim(0, 1.18*max(val))
 sn = list(NAMES.values()); x = np.arange(4); w = 0.2
 bf = [S[k]["t_bruteforce_250"] for k in NAMES]
-ax[1].bar(x-1.5*w, bf, w, color=INK, label="fine Monte Carlo, 250 solves")
+ax[1].bar(x-1.5*w, bf, w, color=GREY, label="fine Monte Carlo, 250 solves")
 for j, (v, l, col, _) in enumerate(VAR):
     ax[1].bar(x+(j-0.5)*w, [S[k]["variants"][v]["t_online"] for k in NAMES], w, color=col, label=l)
 ax[1].set_yscale("log"); ax[1].set_xticks(x); ax[1].set_xticklabels(sn); ax[1].set_ylabel("per-scenario wall-clock (s)")
@@ -53,7 +55,7 @@ fig, ax = plt.subplots(2, 3, figsize=(7.4, 4.6))
 for i, key in enumerate(("1.1", "1.4")):
     mc = S[key]["mc_with_n"]; n = np.array(sorted(int(k) for k in mc))
     for j, (m, t) in enumerate(MET):
-        a_ = ax[i, j]; a_.loglog(n, [SCALE[m]*mc[str(k)][m] for k in n], "-", color=INK, marker="o", ms=3, lw=1.2, label="fine Monte Carlo, n solves")
+        a_ = ax[i, j]; a_.loglog(n, [SCALE[m]*mc[str(k)][m] for k in n], "-", color=GREY, marker="o", ms=3.5, lw=1.8, label="fine Monte Carlo, n solves")
         for v, l, col, mk in VAR:
             a_.axhline(SCALE[m]*S[key]["variants"][v][m], color=col, lw=1.3, ls="--" if v != "DA_copula" else "-", label=l)
         a_.set_title(f"{NAMES[key]}: {t}", fontsize=8); a_.set_xlabel("fine solves n")

@@ -18,9 +18,9 @@ import tese_eliptico as te
 
 OUT = sys.argv[1] if len(sys.argv) > 1 else "figs_cost"
 os.makedirs(OUT, exist_ok=True)
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.titleweight": "bold",
+plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 9, "axes.grid": False, "axes.titleweight": "bold",
                      "savefig.dpi": 300, "figure.dpi": 150})
-RED, BLUE, GREY = "#d62728", "#1f77b4", "#7f7f7f"
+RED, BLUE, GREY = "#c62828", "#1f6fe0", "#8a8a8a"  # palette of the original article figures
 
 NF, NC = 120, 10
 te.NF, te.NC = NF, NC; te.ALPHA = NF // NC; te.HF = te.LX / NF; te.HC = te.LX / NC
@@ -73,7 +73,7 @@ fig, ax = plt.subplots(2, 4, figsize=(7.4, 4.3))
 for j, (name, key, mid) in enumerate(SCEN):
     m, s = REF[name]
     im0 = ax[0, j].imshow(m, origin="lower", extent=[0, L, 0, L], cmap="viridis", vmin=0, vmax=1)
-    im1 = ax[1, j].imshow(s, origin="lower", extent=[0, L, 0, L], cmap="magma", vmin=0, vmax=max(REF[n][1].max() for n in REF))
+    im1 = ax[1, j].imshow(s, origin="lower", extent=[0, L, 0, L], cmap="viridis", vmin=0, vmax=max(REF[n][1].max() for n in REF))
     for i in range(2):
         edges(ax[i, j], te.PROBLEMAS[key], mid)
         ax[i, j].set_xticks([0, 5, 10, 15]); ax[i, j].set_yticks([0, 5, 10, 15]); ax[i, j].tick_params(labelsize=6.5)
@@ -95,7 +95,7 @@ fig.savefig(os.path.join(OUT, "fig_problem.png"), bbox_inches="tight"); plt.clos
 k0 = Kf[0]; Kxx, Kyy, Kxy = te.upscale_realisation(k0, te.HF)
 fig, ax = plt.subplots(1, 3, figsize=(7.4, 2.5))
 lk = np.log(k0); lo, hi = lk.min(), lk.max()
-im = ax[0].imshow(lk, origin="lower", extent=[0, L, 0, L], cmap="cividis", vmin=lo, vmax=hi)
+im = ax[0].imshow(lk, origin="lower", extent=[0, L, 0, L], cmap="viridis", vmin=lo, vmax=hi)
 for g in np.linspace(0, L, NC + 1):
     ax[0].axvline(g, color="white", lw=0.5); ax[0].axhline(g, color="white", lw=0.5)
 I, J = 6, 3; hc = L / NC
@@ -103,14 +103,14 @@ ax[0].add_patch(Rectangle((J * hc, I * hc), hc, hc, fill=False, ec=RED, lw=1.5))
 ax[0].set_title("(a) ln κ, fine mesh"); ax[0].set_xlabel("x (m)"); ax[0].set_ylabel("y (m)")
 fig.colorbar(im, ax=ax[0], fraction=0.046, pad=0.03).ax.tick_params(labelsize=6.5)
 a = te.ALPHA; sub = lk[I * a:(I + 1) * a, J * a:(J + 1) * a]
-im = ax[1].imshow(sub, origin="lower", extent=[J * hc, (J + 1) * hc, I * hc, (I + 1) * hc], cmap="cividis", vmin=lo, vmax=hi)
+im = ax[1].imshow(sub, origin="lower", extent=[J * hc, (J + 1) * hc, I * hc, (I + 1) * hc], cmap="viridis", vmin=lo, vmax=hi)
 for g in np.linspace(0, hc, a + 1):
     ax[1].axvline(J * hc + g, color="white", lw=0.4); ax[1].axhline(I * hc + g, color="white", lw=0.4)
 for sp in ax[1].spines.values():
     sp.set_color(RED); sp.set_linewidth(1.5)
 ax[1].set_title("(b) one coarse cell"); ax[1].set_xlabel("x (m)")
 ax[1].set_xticks([J * hc, (J + 1) * hc]); ax[1].set_yticks([I * hc, (I + 1) * hc])
-im = ax[2].imshow(np.log(Kxx), origin="lower", extent=[0, L, 0, L], cmap="cividis", vmin=lo, vmax=hi)
+im = ax[2].imshow(np.log(Kxx), origin="lower", extent=[0, L, 0, L], cmap="viridis", vmin=lo, vmax=hi)
 ax[2].add_patch(Rectangle((J * hc, I * hc), hc, hc, fill=False, ec=RED, lw=1.5))
 ax[2].set_title("(c) ln K$_{xx}$, coarse mesh"); ax[2].set_xlabel("x (m)")
 fig.colorbar(im, ax=ax[2], fraction=0.046, pad=0.03).ax.tick_params(labelsize=6.5)
