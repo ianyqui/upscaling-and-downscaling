@@ -1,0 +1,12 @@
+{
+  "title": "upscaling-and-downscaling (rdupscale): rate–distortion stochastic upscaling by Deterministic Annealing and LML downscaling",
+  "upload_type": "software",
+  "description": "Python package and reproduction scripts for stochastic upscaling of permeability ensembles as rate–distortion coding (Deterministic Annealing) and stochastic LML downscaling in single-phase Darcy flow.",
+  "license": "MIT",
+  "creators": [
+    {"name": "Falcão Costa, Ianyqui", "affiliation": "Universidade Federal de Pernambuco"},
+    {"name": "Guimarães, Leonardo José do Nascimento", "affiliation": "Universidade Federal de Pernambuco"},
+    {"name": "Araújo, Ézio da Rocha", "affiliation": "Universidade Federal de Pernambuco"}
+  ],
+  "keywords": ["stochastic upscaling", "rate-distortion theory", "deterministic annealing", "downscaling", "porous media", "uncertainty quantification"]
+}

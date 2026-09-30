@@ -1,0 +1,13 @@
+# Ambiente de referência (conda/mamba):  conda env create -f environment.yml
+name: rdupscale
+channels: [conda-forge]
+dependencies:
+  - python=3.12
+  - numpy=2.4
+  - scipy=1.17
+  - matplotlib=3.11
+  - joblib=1.6
+  - pytest=9
+  - pip
+  - pip:
+      - -e .

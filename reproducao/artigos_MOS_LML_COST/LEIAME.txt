@@ -1,0 +1,22 @@
+Reproducao numerica com sementes fixas (Python 3.11, NumPy 2.4, SciPy 1.17, joblib 1.5)
+
+Ordem de execucao (na mesma pasta):
+  1) python run_base.py 1.4 1.1 1.3       -> caches _cache_P1_x_NR1000_v14.pkl (~4 min por problema)
+  2) python analyze_base.py                -> master_base.json (metricas principais)
+  3) python measure_tc.py 1.1 1.3 1.4      -> master_tc.json (temperatura medida da 1a divisao)
+  4) python mos_multiseed.py 1.4 1.1 1.3   -> master_mos_multiseed.json (varredura de K, 5 sementes)
+     python mos_aggregate.py               -> master_mos_agg.json
+  5) python lml_oos.py 1.1 1.3 1.4         -> master_lml.json (LML fora da amostra, 500/500)
+  6) python mos_figures.py                 -> figuras do artigo MOS (ajuste a pasta OUT no topo)
+
+Unica alteracao em tese_eliptico.py: np.trapz -> np.trapezoid (compatibilidade com NumPy >= 2.0).
+Sementes: campos 2026101 (P1.1), 2026103 (P1.3), 2026104 (P1.4); macrorrealizacoes 7.
+  7) python lml_paper.py 1.1 1.3 1.4       -> master_lml_paper.json (artigo LML: operador nulo, tamanho de calibracao)
+     python lml_figures.py                 -> figuras do artigo LML
+  8) Artigo de custo (120x120 -> 10x10, alfa = 12, fio unico; OMP/MKL/OPENBLAS_NUM_THREADS=1):
+     python cost_study.py scaling          -> master_cost_scaling.json (escalonamento do solver, ~2 min)
+     python cost_study.py                  -> master_cost.json (500 campos, semente 2026120; ~15 min)
+     python cost_analysis.py               -> master_cost_analysis.json (n_eq e ponto de equilibrio S*)
+     python cost_figures.py                -> figuras do artigo de custo (ajuste OUT no topo)
+     python sing_check.py                  -> master_singularity.json (divergencia da vazao de entrada, S2/S3)
+     Os tempos absolutos dependem da maquina; as razoes entre etapas sao o que o artigo usa.

@@ -1,0 +1,74 @@
+{
+ "1.1": {
+  "xx": {
+   "Tc_theory_mean": 3.10048780441703,
+   "Tsplit_measured_mean": 2.986583858242558,
+   "ratio_measured_over_theory_mean": 0.961120827485971,
+   "ratio_min": 0.8822858345570482,
+   "ratio_max": 1.0193670810932525
+  },
+  "yy": {
+   "Tc_theory_mean": 3.0935612406728707,
+   "Tsplit_measured_mean": 2.9463771089423276,
+   "ratio_measured_over_theory_mean": 0.9517189194742653,
+   "ratio_min": 0.8822858345570482,
+   "ratio_max": 1.0193670810932525
+  },
+  "xy": {
+   "Tc_theory_mean": 0.2678887901268927,
+   "Tsplit_measured_mean": 0.2558805700781598,
+   "ratio_measured_over_theory_mean": 0.9501585611130132,
+   "ratio_min": 0.8822858345570483,
+   "ratio_max": 1.0193670810932527
+  },
+  "ratio_diag_offdiag_measured": 11.593222895690435
+ },
+ "1.3": {
+  "xx": {
+   "Tc_theory_mean": 3.467924505912707,
+   "Tsplit_measured_mean": 3.305581386583136,
+   "ratio_measured_over_theory_mean": 0.9519891333001215,
+   "ratio_min": 0.8822858345570481,
+   "ratio_max": 1.0193670810932527
+  },
+  "yy": {
+   "Tc_theory_mean": 3.4519009820271775,
+   "Tsplit_measured_mean": 3.320150445373059,
+   "ratio_measured_over_theory_mean": 0.9613098542966435,
+   "ratio_min": 0.8822858345570485,
+   "ratio_max": 1.0696401690380408
+  },
+  "xy": {
+   "Tc_theory_mean": 0.2824432967142784,
+   "Tsplit_measured_mean": 0.26450211085277525,
+   "ratio_measured_over_theory_mean": 0.9413704175959985,
+   "ratio_min": 0.8408184003328669,
+   "ratio_max": 1.0193670810932527
+  },
+  "ratio_diag_offdiag_measured": 12.524912959284753
+ },
+ "1.4": {
+  "xx": {
+   "Tc_theory_mean": 3.139871127915929,
+   "Tsplit_measured_mean": 3.0345409143838293,
+   "ratio_measured_over_theory_mean": 0.9648678097855347,
+   "ratio_min": 0.8822858345570482,
+   "ratio_max": 1.0193670810932527
+  },
+  "yy": {
+   "Tc_theory_mean": 3.124954028632235,
+   "Tsplit_measured_mean": 3.0004368250619176,
+   "ratio_measured_over_theory_mean": 0.9561059215978714,
+   "ratio_min": 0.8822858345570485,
+   "ratio_max": 1.1223926222854568
+  },
+  "xy": {
+   "Tc_theory_mean": 0.2725371409330036,
+   "Tsplit_measured_mean": 0.25291331902282044,
+   "ratio_measured_over_theory_mean": 0.9338806863468098,
+   "ratio_min": 0.8408184003328671,
+   "ratio_max": 1.0193670810932527
+  },
+  "ratio_diag_offdiag_measured": 11.930921160583894
+ }
+}

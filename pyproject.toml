@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rdupscale"
+version = "0.2.0"
+description = "Upscaling estocástico por taxa–distorção (Recozimento Determinístico) e downscaling LML para meios porosos heterogêneos"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Ianyqui Falcão Costa", email = "ianyqui.costa@gmail.com" },
+  { name = "Leonardo José do Nascimento Guimarães" },
+  { name = "Ézio da Rocha Araújo" },
+]
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "matplotlib>=3.7",
+  "joblib>=1.3",
+]
+
+[project.urls]
+Repository = "https://github.com/ianyqui/upscaling-and-downscaling"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

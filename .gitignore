@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+resultados/
+*.pkl
+!reproducao/artigo_MAIN/main_flow_fields.pkl

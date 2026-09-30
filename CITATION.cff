@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "upscaling-and-downscaling (rdupscale): rate–distortion stochastic upscaling by Deterministic Annealing and LML downscaling"
+version: 0.2.0
+date-released: 2026-09-30
+license: MIT
+repository-code: "https://github.com/ianyqui/upscaling-and-downscaling"
+authors:
+  - family-names: "Falcão Costa"
+    given-names: "Ianyqui"
+    email: "ianyqui.costa@gmail.com"
+    affiliation: "Programa de Pós-Graduação em Engenharia Civil, Universidade Federal de Pernambuco"
+  - family-names: "Guimarães"
+    given-names: "Leonardo José do Nascimento"
+    affiliation: "Programa de Pós-Graduação em Engenharia Civil, Universidade Federal de Pernambuco"
+  - family-names: "Araújo"
+    given-names: "Ézio da Rocha"
+    affiliation: "Programa de Pós-Graduação em Engenharia Civil, Universidade Federal de Pernambuco"
+keywords:
+  - stochastic upscaling
+  - rate-distortion theory
+  - deterministic annealing
+  - downscaling
+  - porous media
+  - uncertainty quantification

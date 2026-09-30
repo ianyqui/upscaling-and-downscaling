@@ -1,0 +1,5 @@
+{
+  "seed_macro": 7,
+  "da_params": "DAParams.legacy()",
+  "n_R": 25
+}
